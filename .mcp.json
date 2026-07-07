@@ -1,0 +1,21 @@
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@playwright/mcp@latest",
+        "--browser=chrome",
+        "--user-data-dir=./.playwright-profile"
+      ]
+    },
+    "moneyforward": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://beta.mcp.developers.biz.moneyforward.com/mcp/ca/v3"
+      ]
+    }
+  }
+}

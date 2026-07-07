@@ -1,0 +1,38 @@
+service_name: "Wix プレミアムプラン"
+frequency: monthly
+# 既定は月額。年額契約は local.yml の services.wix.frequency: yearly で上書き
+# （サイクル依存フィールドの解決は register Step 0 参照）。
+
+# ダウンロード手順は .claude/skills/download/references/wix.md を参照
+
+duplicate_check:
+  method: by_trade_partner_code
+  # trade_partner_code はスキル実行時に mfc_ca_getTradePartners で自動取得し local.yml の cache: にキャッシュ
+
+mf_search:
+  # card（MF 連携カード名）は local.yml の services.wix.card を参照
+  keyword: "WIX"
+  # MF 摘要に現れる表記は未確認。カード明細を確認して適宜更新すること
+
+trade_partner: "Wix.com LTD"
+
+billing_modes:
+  monthly:
+    filename_pattern: "YYYY-MM-wix-{name_us}-invoice.pdf"
+    # 複数サイトをファイル名で識別するため規約（YYYY-MM-<svc>-invoice.pdf）で表せない例外パターン。
+    # YYYY-MM = 請求書発行日の年月
+    # {name_us} = sites[].name のドットをアンダースコアに変換した値（例: example.com → example_com。
+    #   識別子のファイル名変換規則は download/SKILL.md Step 0 参照）
+    #   sites 未指定時は billing-history から取得したサイト識別子を同様に正規化
+    date_rule: from_pdf
+    # 取引日 = 請求書の発行日（契約開始日依存のため固定日は仮定しない）
+    memo_template: "Wix {plan} {year}年{month}月分（{site}）"
+    # {plan} = 請求書 PDF の明細列（例:「プレミアムプラン パーソナル」）から読み取る
+    # {site} = local.yml の services.wix.sites[].name（未指定時は billing-history の表示から読み取り）
+  yearly:
+    # ★未確認: 年額契約の実データ未確認。年額契約で初回実行する際に実 PDF を確認して確定する
+    filename_pattern: "YYYY-wix-{name_us}-invoice.pdf"
+    date_rule: yearly_from_pdf
+    # 取引日 = PDF 発行日。年に 1 件のみ。請求月は local.yml の services.wix.billing_month
+    # または cache.wix.billing_month（register が学習）を参照
+    memo_template: "Wix {plan} 年間契約（{site}、{period_start}〜{period_end}）"

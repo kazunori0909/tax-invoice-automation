@@ -1,0 +1,29 @@
+service_name: "マネーフォワード クラウド"
+frequency: monthly
+# 既定は月額。年額契約は local.yml の services.moneyforward.frequency: yearly で上書き
+# （サイクル依存フィールドの解決は register Step 0 参照）。
+
+duplicate_check:
+  method: by_trade_partner_code
+  # trade_partner_code はスキル実行時に mfc_ca_getTradePartners で自動取得し local.yml の cache: にキャッシュ
+
+mf_search:
+  # card（MF 連携カード名）は local.yml の services.moneyforward.card を参照
+  keyword: "マネ-フオワ-ド"
+  # ★初回確定: MF カード明細上の表記（全角カタカナの可能性あり）。カード明細から仕訳を起こす場合に実際の明細で確定する
+
+trade_partner: "株式会社マネーフォワード"
+
+billing_modes:
+  monthly:
+    date_rule: from_pdf
+    # 取引日 = 請求書の発行日（請求日ではない）
+    memo_template: "マネーフォワードクラウド（{year}年{month}月分）"
+    # {year}{month} = 請求書の請求日から確認
+  yearly:
+    date_rule: yearly_from_pdf
+    # 取引日 = 請求書の発行日（請求日ではない）。年に 1 件のみ。請求月は local.yml の
+    # services.moneyforward.billing_month または cache.moneyforward.billing_month（register が学習）を参照。
+    # 請求日と発行日が年をまたぐ場合（請求日=前年末・発行日=翌年初等）も発行日の年度で計上する
+    memo_template: "マネーフォワードクラウド年間使用料"
+    # 固定文言のため変数抽出は不要

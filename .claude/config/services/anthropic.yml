@@ -1,0 +1,33 @@
+service_name: "Anthropic（Claude）"
+# プラン名（Free/Pro/Max/Team/Enterprise）はユーザーにより異なるため service_name には含めない。
+# 具体的なプラン名は請求書 PDF・カード明細・claude.ai の請求ページから都度確認する。
+frequency: monthly
+# 既定は月額。年額契約は local.yml の services.anthropic.frequency: yearly で上書き
+# （サイクル依存フィールドの解決は register Step 0 参照）。
+
+duplicate_check:
+  method: by_trade_partner_code
+  # trade_partner_code はスキル実行時に mfc_ca_getTradePartners で自動取得し local.yml の cache: にキャッシュ
+
+mf_search:
+  # card（MF 連携カード名）は local.yml の services.anthropic.card を参照
+  keyword: "ANTHROPIC"
+  # MFカード明細上の表記は "ANTHROPIC* CLAUDE SU"（2026-07-03 実機確認）
+
+trade_partner: "Anthropic, PBC"
+
+billing_modes:
+  monthly:
+    date_rule: learned_anchor
+    # 取引日 = cache.anthropic.billing_anchor（契約開始日依存の請求日。register が MF 連携データから学習）
+    # から計算した対象月の期待日。カード計上が 1 日程度後ろへズレることがあるため、
+    # 重複チェックは期待日 ±3 日（月境界をまたいで拡張）で検索し、MF 実取引日を優先する。
+    memo_template: "Claude {year}年{month}月請求分（{period_start}〜{period_end}）"
+    # {year}{month} = 請求書発行月。期間は PDF の Date of issue とサービス期間
+    # （例: Apr 30–May 31, 2026）から確認する。
+  yearly:
+    # ★未確認: 年払いプランの実データ未確認。年額契約で初回実行する際に実 PDF を確認して確定する
+    date_rule: yearly_from_pdf
+    # 取引日 = PDF 発行日。年に 1 件のみ。請求月は local.yml の services.anthropic.billing_month
+    # または cache.anthropic.billing_month（register が学習）を参照
+    memo_template: "Claude 年間請求分（{period_start}〜{period_end}）"

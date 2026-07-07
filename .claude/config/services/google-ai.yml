@@ -1,0 +1,32 @@
+service_name: "Google AI"
+# プラン名（Plus/Pro/Ultra）はユーザーにより異なるため service_name には含めない。
+# 具体的なプラン名は請求書 PDF・カード明細・Google Pay の取引ラベルから都度確認する。
+frequency: monthly
+# 既定は月額。年払いプランは local.yml の services.google-ai.frequency: yearly で上書き
+# （サイクル依存フィールドの解決は register Step 0 参照）。
+
+duplicate_check:
+  method: by_trade_partner_code
+  # trade_partner_code はスキル実行時に mfc_ca_getTradePartners で自動取得し local.yml の cache: にキャッシュ
+
+mf_search:
+  # card（MF 連携カード名）は local.yml の services.google-ai.card を参照
+  keyword: "GOOGLE PLAY JAPAN"
+  # MFカード明細上の表記は "GOOGLE PLAY JAPAN"（2026-06-19 実機確認）
+
+trade_partner: "Google Asia Pacific Pte. Ltd."
+
+billing_modes:
+  monthly:
+    date_rule: learned_anchor
+    # 取引日 = cache.google-ai.billing_anchor（契約開始日依存の請求日。register が MF 連携データから学習）
+    # から計算した対象月の期待日（請求書発行日と同日）。重複チェックは期待日 ±3 日で検索し、
+    # MF 実取引日を優先する。
+    memo_template: "Google AI {year}年{month}月請求分（{period_start}〜{period_end}）"
+    # {period_start}〜{period_end} = アンカー日〜翌月アンカー日前日（アンカー日から機械的に計算）
+  yearly:
+    date_rule: yearly_from_pdf
+    # 取引日 = 請求書の発行日。年に 1 件のみ。請求月は local.yml の services.google-ai.billing_month
+    # または cache.google-ai.billing_month（register が学習）を参照
+    memo_template: "Google AI 年間請求分（{period_start}〜{period_end}）"
+    # 期間は請求書の発行日・契約期間から確認する

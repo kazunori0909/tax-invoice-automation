@@ -1,0 +1,44 @@
+# 個人設定の雛形。書き方・各キーの意味は同じフォルダの README.md（セットアップガイド）を参照。
+#   cp .claude/config/local.example.yml .claude/config/local.yml
+
+# キーを列挙したサービスだけが処理対象になる。使わないサービスはキーごと削除する。
+services:
+  moneyforward:
+    # frequency: yearly
+    # card: カード名称
+
+  anthropic:
+    # frequency: yearly
+    # card: カード名称
+
+  google-ai:
+    # frequency: yearly
+    # card: カード名称
+
+  xserver:
+    # frequency: yearly
+    # card: カード名称
+
+  wix:
+    sites:
+      - name: example.com
+      # - name: myshop.com
+    # card: カード名称
+
+  moomoo:
+    domains:
+      - fqdn: example.com
+        billing_month: 2
+    # card: カード名称
+
+# 仕訳登録（/register・/credit-payment）を使う場合のみ必要。ダウンロードだけなら削除してOK。
+credit_cards:
+  - name: カード名称              # services.<svc>.card と同じ文字列にする
+    type: personal
+
+  - name: 事業用カード名称
+    type: business
+    closing: month_end            # 月末締め
+    payment_day: 26               # 翌月の支払日
+
+# cache: セクションはスキルが自動生成する（手動設定不要。README.md 参照）

@@ -1,0 +1,31 @@
+service_name: "ムームードメイン"
+frequency: yearly_per_domain
+# ドメイン契約はサービス仕様上「年契約のみ」（月払いは存在しない）。billing_modes は定義しない。
+# 更新月はドメインごとに異なるため local.yml の services.moomoo.domains[].billing_month で管理する。
+
+invoice:
+  filename_pattern: "YYYY-moomoo-{domain_fqdn_us}-invoice.pdf"
+  # 複数ドメインをファイル名で識別するため規約（YYYY-<svc>-invoice.pdf）で表せない例外パターン。
+  # {domain_fqdn_us} = 処理対象ドメインの fqdn の "." を "_" に置換した値（例: example.com → example_com）
+
+duplicate_check:
+  method: by_memo_keyword
+  # 取引先が全ドメイン共通（GMOペパボ）のため、ドメインの識別に摘要キーワードを使う
+  keyword: "ムームードメイン {domain_fqdn}"
+  # {domain_fqdn} は処理対象ドメインの fqdn フィールドに置換する
+  date_rule: from_pdf
+  # 取引日 = PDF（メール）の引落日
+
+mf_search:
+  # card（MF 連携カード名）は local.yml の services.moomoo.card を参照
+  keyword: "ム-ム-ドメイン"
+  # 全角カタカナ（MF が自動変換）
+
+memo_template: "ムームードメイン {domain_fqdn}（{period_start}〜{period_end}）"
+# 期間 = PDF の「契約開始日/契約終了日」から確認
+
+trade_partner: "GMOペパボ株式会社"
+# MF に未登録の場合は mfc_ca_postTradePartners で登録（登録番号は請求書 PDF 記載の値）してからページをリロード
+
+# 処理対象ドメイン（fqdn / billing_month）は local.yml の services.moomoo.domains を参照。
+# ドメイン単位で処理。証憑はメールを PDF 化したもの（領収書なし）。

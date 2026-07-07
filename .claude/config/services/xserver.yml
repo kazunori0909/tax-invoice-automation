@@ -1,0 +1,31 @@
+service_name: "Xserver"
+# プラン名（スタンダード/プレミアム/ビジネス）はユーザーにより異なるため service_name には含めない。
+# 具体的なプラン名は請求書 PDF・契約情報から都度確認する。
+frequency: monthly
+# 既定は月額。年額契約は local.yml の services.xserver.frequency: yearly で上書き
+# （サイクル依存フィールドの解決は register Step 0 参照）。
+
+duplicate_check:
+  method: by_trade_partner_code
+  # trade_partner_code はスキル実行時に mfc_ca_getTradePartners で自動取得し local.yml の cache: にキャッシュ
+
+mf_search:
+  # card（MF 連携カード名）は local.yml の services.xserver.card を参照
+  keyword: "エツクスサ-バ-"
+  # 全角カタカナ（MF が自動変換）
+
+trade_partner: "エックスサーバー株式会社"
+
+# 証憑は請求書と領収書の両方を添付する。
+billing_modes:
+  monthly:
+    date_rule: from_pdf
+    # 取引日 = PDF（請求書）に記載の請求日
+    memo_template: "Xserver（{year}年{month}月分）"
+    # {year}{month} = PDF 発行日から確認
+  yearly:
+    date_rule: yearly_from_pdf
+    # 取引日 = PDF 発行日。年に 1 件のみ。請求月は local.yml の services.xserver.billing_month
+    # または cache.xserver.billing_month（register が学習）を参照
+    memo_template: "Xserver 年間契約（{period_start}〜{period_end}）"
+    # 期間 = PDF の「ご契約期間」から確認
