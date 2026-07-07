@@ -4,7 +4,7 @@
       "command": "npx",
       "args": [
         "-y",
-        "@playwright/mcp@latest",
+        "@playwright/mcp@0.0.77",
         "--browser=chrome",
         "--user-data-dir=./.playwright-profile"
       ]
@@ -13,7 +13,7 @@
       "command": "npx",
       "args": [
         "-y",
-        "mcp-remote",
+        "mcp-remote@0.1.38",
         "https://beta.mcp.developers.biz.moneyforward.com/mcp/ca/v3"
       ]
     }
