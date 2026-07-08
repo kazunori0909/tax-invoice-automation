@@ -14,13 +14,13 @@
 
 利用中サービスは `local.yml` の `services:` で宣言する（詳細は [docs/README.md](docs/README.md) 参照）。
 
-| サービス | 請求書の取得元 | ヘルプ |
+| サービス | 請求書の取得元（要ログイン） | ヘルプ |
 |---|---|---|
 | マネーフォワード クラウド<br/>[biz.moneyforward.com](https://biz.moneyforward.com) | [利用明細](https://erp.moneyforward.com/office_usage_detail_statements) | [請求書の確認方法](https://biz.moneyforward.com/support/plan/guide/g010.html) |
-| Anthropic (Claude)<br/>[claude.ai](https://claude.ai) | メール添付 PDF（Gmail）。<br/>無い月は [Billing](https://claude.ai/settings/billing) からフォールバック | [Paid Plan Billing FAQs](https://support.claude.com/en/articles/8325618-paid-plan-billing-faqs) |
-| Google AI<br/>[one.google.com](https://one.google.com) | [Google Pay 取引履歴](https://pay.google.com/payments/home)（Google One 経由） | [Google での購入履歴を確認する](https://support.google.com/googleone/answer/11828789?hl=ja) |
+| Anthropic (Claude)<br/>[claude.ai](https://claude.ai) | [Billing](https://claude.ai/settings/billing)。<br/>無い月はメール添付 PDF（Gmail）からフォールバック | [Paid Plan Billing FAQs](https://support.claude.com/en/articles/8325618-paid-plan-billing-faqs) |
+| Google AI<br/>[one.google.com](https://one.google.com) | [Google Pay 取引履歴](https://pay.google.com/payments/home)<br/>（Google One 経由） | [Google での購入履歴を確認する](https://support.google.com/googleone/answer/11828789?hl=ja) |
 | Xserver<br/>[xserver.ne.jp](https://www.xserver.ne.jp) | [料金支払い履歴](https://secure.xserver.ne.jp/xapanel/xserver/payment/history/index) | [請求書・受領書・見積書](https://www.xserver.ne.jp/manual/man_order_pay_bill.php) |
-| ムームードメイン<br/>[muumuu-domain.com](https://muumuu-domain.com) | メール本文を PDF 化<br/>（PDF 発行なし・メールが適格請求書） | [適格請求書・領収書は発行してもらえますか](https://support.muumuu-domain.com/hc/ja/articles/360045800534) |
+| ムームードメイン<br/>[muumuu-domain.com](https://muumuu-domain.com) | メール本文を PDF 化<br/>（メールが適格請求書） | [適格請求書・領収書は発行してもらえますか](https://support.muumuu-domain.com/hc/ja/articles/360045800534) |
 | Wix<br/>[wix.com](https://www.wix.com) | [請求履歴](https://manage.wix.com/account/billing-history) | [Wix サービスの請求書](https://support.wix.com/ja/wix-%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9%E3%81%AE%E8%AB%8B%E6%B1%82%E6%9B%B8) |
 
 ## セットアップ
@@ -30,7 +30,7 @@
 - [Claude Code](https://docs.claude.com/claude-code) がインストール済みであること
 - Node.js / npm（`npx` が使えること。`.mcp.json` の MCP サーバーは `npx` 経由で起動する）
 - Google Chrome がインストール済みであること（Playwright MCP は `--browser=chrome` でローカルの Chrome を操作する）
-- メールで届く請求書を扱うサービス（Anthropic・ムームードメイン等）は Gmail 前提（Gmail の画面構造に依存した操作のため、他メールサービスは非対応）
+- メールで届く請求書を扱うサービス（ムームードメイン等）は Gmail 前提（Gmail の画面構造に依存した操作のため、他メールサービスは非対応）
 - **仕訳の自動登録（`/register`・`/monthly`・`/credit-payment`）を使う場合のみ**
    - マネーフォワード クラウド会計の契約・ログイン情報。  
      請求書ダウンロード（`/download`）だけの利用なら不要。  
