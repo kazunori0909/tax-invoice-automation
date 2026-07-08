@@ -14,14 +14,14 @@
 
 利用中サービスは `local.yml` の `services:` で宣言する（詳細は [docs/README.md](docs/README.md) 参照）。
 
-| サービス | トップページ | 請求書の取得元 | ヘルプ |
-|---|---|---|---|
-| マネーフォワード クラウド | [biz.moneyforward.com](https://biz.moneyforward.com) | [利用明細](https://erp.moneyforward.com/office_usage_detail_statements) | [請求書の確認方法](https://biz.moneyforward.com/support/plan/guide/g010.html) |
-| Anthropic (Claude) | [claude.ai](https://claude.ai) | メール添付 PDF（Gmail）。<br/>無い月は [Billing](https://claude.ai/settings/billing) からフォールバック | [Paid Plan Billing FAQs](https://support.claude.com/en/articles/8325618-paid-plan-billing-faqs) |
-| Google AI | [one.google.com](https://one.google.com) | [Google Pay 取引履歴](https://pay.google.com/payments/home)（Google One 経由） | [Google での購入履歴を確認する](https://support.google.com/googleone/answer/11828789?hl=ja) |
-| Xserver | [xserver.ne.jp](https://www.xserver.ne.jp) | [料金支払い履歴](https://secure.xserver.ne.jp/xapanel/xserver/payment/history/index) | [請求書・受領書・見積書](https://www.xserver.ne.jp/manual/man_order_pay_bill.php) |
-| ムームードメイン | [muumuu-domain.com](https://muumuu-domain.com) | メール本文を PDF 化<br/>（PDF 発行なし・メールが適格請求書） | [適格請求書・領収書は発行してもらえますか](https://support.muumuu-domain.com/hc/ja/articles/360045800534) |
-| Wix | [wix.com](https://www.wix.com) | [請求履歴](https://manage.wix.com/account/billing-history) | [Wix サービスの請求書](https://support.wix.com/ja/wix-%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9%E3%81%AE%E8%AB%8B%E6%B1%82%E6%9B%B8) |
+| サービス | 請求書の取得元 | ヘルプ |
+|---|---|---|
+| マネーフォワード クラウド<br/>[biz.moneyforward.com](https://biz.moneyforward.com) | [利用明細](https://erp.moneyforward.com/office_usage_detail_statements) | [請求書の確認方法](https://biz.moneyforward.com/support/plan/guide/g010.html) |
+| Anthropic (Claude)<br/>[claude.ai](https://claude.ai) | メール添付 PDF（Gmail）。<br/>無い月は [Billing](https://claude.ai/settings/billing) からフォールバック | [Paid Plan Billing FAQs](https://support.claude.com/en/articles/8325618-paid-plan-billing-faqs) |
+| Google AI<br/>[one.google.com](https://one.google.com) | [Google Pay 取引履歴](https://pay.google.com/payments/home)（Google One 経由） | [Google での購入履歴を確認する](https://support.google.com/googleone/answer/11828789?hl=ja) |
+| Xserver<br/>[xserver.ne.jp](https://www.xserver.ne.jp) | [料金支払い履歴](https://secure.xserver.ne.jp/xapanel/xserver/payment/history/index) | [請求書・受領書・見積書](https://www.xserver.ne.jp/manual/man_order_pay_bill.php) |
+| ムームードメイン<br/>[muumuu-domain.com](https://muumuu-domain.com) | メール本文を PDF 化<br/>（PDF 発行なし・メールが適格請求書） | [適格請求書・領収書は発行してもらえますか](https://support.muumuu-domain.com/hc/ja/articles/360045800534) |
+| Wix<br/>[wix.com](https://www.wix.com) | [請求履歴](https://manage.wix.com/account/billing-history) | [Wix サービスの請求書](https://support.wix.com/ja/wix-%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9%E3%81%AE%E8%AB%8B%E6%B1%82%E6%9B%B8) |
 
 ## セットアップ
 
