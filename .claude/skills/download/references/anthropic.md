@@ -6,9 +6,10 @@
 
 1. `https://claude.ai/settings/billing` を開く
    - 注意：`console.anthropic.com/settings/billing` は API 課金用で**別物**
-2. 請求書テーブル（日付 / 合計 / ステータス / アクション）の対象行の「表示」リンクをクリック
-   → 新規タブで Stripe ホスト型請求書（`https://invoice.stripe.com/i/acct_.../live_...`）が開く
-3. **YYYY-MM の導出**：Stripe 請求書の **"Date of issue"** 基準（claude.ai の表示日付とは異なる点に注意）
+2. **YYYY-MM の導出**：請求書テーブル（日付 / 合計 / ステータス / アクション）の**「日付」列**を基準にする
+   （Stripe 請求書側の日付ではない。理由は下記「注意・落とし穴」参照）
+3. 対象行の「表示」リンクをクリック → 新規タブで Stripe ホスト型請求書
+   （`https://invoice.stripe.com/i/acct_.../live_...`）が開く
 4. 「請求書をダウンロード」ボタンをレシピ A でダウンロード → リネーム移動
 5. Stripe タブを閉じて元のタブに戻る
 
@@ -41,10 +42,14 @@ const match = body.match(/Paid\s+(\w+)\s+\d+,\s+(\d{4})/);
 
 - Stripe ページの URL（`acct_xxx` を含む）は機密扱い
 - PDF はどちらのルートでも同一（Stripe 生成の Invoice PDF。メール添付はその写し）
-- 年月の基準がルートで異なる（Billing = Date of issue／メール = Paid 日付）。通常は同日だが、
-  月境界でズレが疑われる場合は添付 PDF 内の Date of issue を確認して Billing 側の基準に合わせる
+- **Stripe 請求書ページに "Date of issue" という項目は存在しない**（日本語 UI では「支払い日」のみ表示）
+- **claude.ai の請求書テーブルの日付と Stripe の「支払い日」は最大1日ズレることがある**
+  （契約更新日が月境界付近のためタイムゾーン差で前日になる例を確認済み）。
+  **年月の判定は必ず claude.ai テーブル側の日付を使う**（MF 連携のカード明細の取引日と一致するのはこちら）
 
 ## 確認済み実例
 
-- claude.ai 経由（2026-05-24 実行）：Stripe 請求書番号は `XXXXXXXX-NNNN` 形式。"Date of issue" でファイル名の年月を決定
+- claude.ai 経由（2026-07-08 実行、6月分）：請求書テーブルの日付は「2026年6月1日」だが、
+  開いた Stripe 請求書の「支払い日」は「2026年5月31日」。テーブル側（6月）を年月として採用し、
+  MF 連携データの取引日と一致することを確認
 - メール経由（2026-06-01 実行）：検索 `from:mail.anthropic.com` でヒット。添付の aria-label クリックで `.playwright-mcp/` に自動保存
