@@ -2,10 +2,10 @@
 
 ## はじめに（初回セットアップ）
 
-本プロジェクトを使い始める前に、個人設定ファイル `local.yml` を作成する必要があります。
+本プロジェクトを使い始める前に、個人設定ファイル `local.yml` を作成する必要があります。  
 作り方・各キーの意味は [.claude/config/README.md](../.claude/config/README.md)（セットアップガイド）を参照してください。
 
-> **`services:` に記載したサービスのみが処理対象になります。**
+> **`services:` に記載したサービスのみが処理対象になります。**  
 > 新サービスを追加・停止する場合は `services:` のキーを追加・削除するだけでスキルに反映されます。
 
 ---
@@ -16,7 +16,7 @@
 
 | タイミング | スキル | 内容 |
 |---|---|---|
-| 月末〜翌月初（請求書が出たら） | `/monthly` | 月次サービスの請求書ダウンロード → MF 仕訳登録 → 証憑 PDF 添付 |
+| 月末〜翌月初<br/>（請求書が出たら） | `/monthly` | 月次サービスの請求書ダウンロード → MF 仕訳登録 → 証憑 PDF 添付 |
 | カード引き落とし後 | `/credit-payment` | 未払金型（`type: business`）カードの引き落とし仕訳の確認（`local.yml` の `credit_cards:` が対象。個人用カードは事業主借直接のため対象外） |
 
 > 引き落とし日はカードごとに `local.yml` の `credit_cards`（`closing`/`payment_day`）で決まる。土日祝の場合は翌営業日。
@@ -44,7 +44,7 @@
 
 | スキル | 説明 |
 |---|---|
-| `/download [service\|全部]` | 請求書 PDF のダウンロード。共通フロー・方式レシピは `download/SKILL.md`、サービス固有手順は `download/references/<svc>.md` に分離。`全部` 指定で `local.yml` の `services:` の全サービスを処理 |
+| `/download [service\|全部]` | 請求書 PDF のダウンロード。<br/>共通フロー・方式レシピは `download/SKILL.md`、サービス固有手順は `download/references/<svc>.md` に分離。`全部` 指定で `local.yml` の `services:` の全サービスを処理 |
 | `/register [service\|全部]` | MF 仕訳登録・証憑 PDF 添付。`全部` 指定で `local.yml` の `services:` の全サービスを処理 |
 
 > サービスの請求サイクル（月額/年額）は `local.yml` の `services.<svc>.frequency` で切替（`services/*.yml` の `billing_modes` を持つサービスのみ）。
@@ -66,16 +66,19 @@
 
 | 層 | パス | Git | 内容 |
 |---|---|---|---|
-| データ層：汎用仕様 | `.claude/config/services/<svc>.yml` | 管理 | サービスの宣言的仕様（頻度・検索キーワード・摘要テンプレ・取引先・重複チェック・命名規則の例外）。誰の契約でも変わらない値のみ |
-| データ層：個人値・キャッシュ | `.claude/config/local.yml` | 管理外 | `services:`（カード名・ドメイン等の個人設定）・`cache:`（スキルが学習・自動生成する値）・`credit_cards:` |
-| 手順層：共通手順 | `.claude/skills/<skill>/SKILL.md` | 管理 | 全サービス共通の手順。サービス差分はデータ層のパラメータで表現する |
-| 手順層：サービス固有差分 | `.claude/skills/download/references/<svc>.md` | 管理 | ダウンロードの取得導線（URL・セレクタ・方式レシピ選択）。消費者が `/download` のみのためスキル配下に置く |
+| データ層：<br/>汎用仕様 | `.claude/config/services/<svc>.yml` | 管理 | サービスの宣言的仕様（頻度・検索キーワード・摘要テンプレ・取引先・重複チェック・命名規則の例外）。<br/>誰の契約でも変わらない値のみ |
+| データ層：<br/>個人値・キャッシュ | `.claude/config/local.yml` | 管理外 | `services:`（カード名・ドメイン等の個人設定）・`cache:`（スキルが学習・自動生成する値）・`credit_cards:` |
+| 手順層：<br/>共通手順 | `.claude/skills/<skill>/SKILL.md` | 管理 | 全サービス共通の手順。<br/>サービス差分はデータ層のパラメータで表現する |
+| 手順層：<br/>サービス固有差分 | `.claude/skills/download/references/<svc>.md` | 管理 | ダウンロードの取得導線（URL・セレクタ・方式レシピ選択）。<br/>消費者が `/download` のみのためスキル配下に置く |
 
 ### 設計原則
 
-- **`services/<svc>.yml` は複数スキルが読む共有データの SSOT**。下記マップのとおり 4 スキルが参照するため、特定スキルの配下ではなく中立な `config/` に置く。スキル配下へ移すと、共有フィールドの重複か、他スキルのディレクトリを参照する越境が発生する
-- **手順はスキルへ、データは config へ**。サービス固有の情報でも、「手順」（導線・クリック対象・落とし穴）なら `download/references/<svc>.md`、「データ」（値・パターン・ルール）なら `services/<svc>.yml`（汎用）または `local.yml`（個人値）
-- **利用者がカスタマイズするのは config のみ**。skills は共通ロジックであり、サービスの追加・変更で編集するのは原則データ層（＋download の references）だけで済むようにする
+- **`services/<svc>.yml` は複数スキルが読む共有データの SSOT**  
+下記マップのとおり 4 スキルが参照するため、特定スキルの配下ではなく中立な `config/` に置く。スキル配下へ移すと、共有フィールドの重複か、他スキルのディレクトリを参照する越境が発生する
+- **手順はスキルへ、データは config へ**  
+サービス固有の情報でも、「手順」（導線・クリック対象・落とし穴）なら `download/references/<svc>.md`、「データ」（値・パターン・ルール）なら `services/<svc>.yml`（汎用）または `local.yml`（個人値）
+- **利用者がカスタマイズするのは config のみ**  
+skills は共通ロジックであり、サービスの追加・変更で編集するのは原則データ層（＋download の references）だけで済むようにする
 
 ### 保存先・ファイル名・借方の規約（yml に書かない値）
 
