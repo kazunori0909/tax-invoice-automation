@@ -39,15 +39,24 @@
 ### 手順
 
 1. リポジトリをチェックアウトする
-2. `.claude/config/local.example.yml` を `.claude/config/local.yml` にコピーし、
-   カード口座・取引先コード・所有ドメインなど個人設定を記入する。
-   書き方の詳細は [.claude/config/README.md](.claude/config/README.md) を参照
-3. このディレクトリで Claude Code を起動する。`.mcp.json` に定義された `playwright` / `moneyforward` の
+2. このディレクトリで Claude Code を起動し `/setup` を実行する。
+   `local.yml` 作成の案内、利用スタイル（ダウンロードのみ／仕訳登録も使う）の確認、
+   ダウンロードのみの場合の MoneyForward MCP 無効化（書き込み前に確認）まで対話的に進める。
+   - 手動で行う場合：`.claude/config/local.example.yml` を `.claude/config/local.yml` にコピーし、
+     カード口座・取引先コード・所有ドメインなど個人設定を記入する
+     （書き方の詳細は [.claude/config/README.md](.claude/config/README.md) を参照）。
+     請求書ダウンロードのみ利用する場合は `.claude/settings.local.json`（Git 管理外。
+     無ければ新規作成）に `"disabledMcpjsonServers": ["moneyforward"]` を追記すると、
+     MoneyForward MCP の OAuth 認証を求められずに済む
+     （仕訳登録も使う場合は不要。後述のとおり `/register` 等の実行時に自動解除される）
+3. `.mcp.json` に定義された `playwright`（および無効化していない場合は `moneyforward`）の
    MCP サーバー使用を確認するプロンプトが出るので許可する
 4. `/download` や `/monthly` を初めて実行すると Playwright がブラウザ（Chrome）を起動する。
    各サービスに未ログインの場合はそのブラウザ上で手動ログインする（ログイン状態は `.playwright-profile/` に永続化され、次回以降は不要）
 5. `/register` 等でマネーフォワード MCP に初めてアクセスすると、OAuth 認可のためブラウザが開く。
-   マネーフォワードにログインし、アプリ連携を許可する（以後は再認証不要）
+   マネーフォワードにログインし、アプリ連携を許可する（以後は再認証不要）。
+   手順2で無効化していた場合は、`/register` 等の実行時に `settings.local.json` の編集と
+   再起動を促されるので、再起動後にもう一度実行する
 
 ## 運用スケジュール
 

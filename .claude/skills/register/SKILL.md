@@ -25,7 +25,8 @@ description: 仕訳登録スキル。サービス名（anthropic / google-ai / m
 
 ## 前提条件
 
-- MoneyForward MCP が認証済み（未認証の場合は `mfc_ca_authorize` → `mfc_ca_exchange` を実施）
+- MoneyForward MCP が有効・認証済み（無効化されている場合は `.claude/skills/_shared/security.md`
+  の「MoneyForward MCP 有効化チェック」を実施。未認証の場合は `mfc_ca_authorize` → `mfc_ca_exchange` を実施）
 - Playwright MCP が設定済み、かつマネーフォワードにログイン済み
 - 対象サービスの請求書 PDF が所定の `invoices/{service}/` に存在する
 
